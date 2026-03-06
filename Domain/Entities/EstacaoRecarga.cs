@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,6 +25,17 @@ namespace Domain.Entities
             {
                 throw new DomainException("Estação já está em uso.");
             }
+
+            EstaOcupada = true;
+        }
+
+        public void FinalizarRecarga() => EstaOcupada = false;
+
+        public void AgendarManutencao()
+        {
+            if (EstaOcupada)
+                throw new DomainException("Finalize a recarga antes de iniciar a manutenção.");
+            EmManutencao = true;
         }
     }
 }
