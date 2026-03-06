@@ -7,7 +7,7 @@ namespace Domain.Interfaces
 {
     public interface IEstacaoRepository
     {
-        Task<EstacaoRecarga> ObterPorIdAsync(Guid id);
+        Task<EstacaoRecarga?> ObterPorIdAsync(Guid id);
         Task AdicionarAsync(EstacaoRecarga estacao);
         void Atualizar(EstacaoRecarga estacao);
     }

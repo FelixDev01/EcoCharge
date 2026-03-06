@@ -20,6 +20,7 @@ public class EstacaoService(
 
     public async Task IniciarRecargaAsync(Guid estacaoId)
     {
+
         var estacao = await repository.ObterPorIdAsync(estacaoId);
 
         if (estacao == null)
@@ -29,5 +30,10 @@ public class EstacaoService(
 
         repository.Atualizar(estacao);
         await uow.CommitAsync();
+    }
+
+    public async Task<EstacaoRecarga?> ObterPorIdAsync(Guid id)
+    {
+        return await repository.ObterPorIdAsync(id);
     }
 }

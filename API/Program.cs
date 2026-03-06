@@ -1,23 +1,35 @@
+using Domain.Exceptions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Infrastructure.InfraModule.AddInfrastructure(builder.Services, builder.Configuration);
+Application.AppModule.AddApplication(builder.Services);
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.Use(async (context, next) =>
+{
+    try { await next(); }
+    catch (DomainException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await context.Response.WriteAsJsonAsync(new { mensagem = ex.Message });
+    }
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
